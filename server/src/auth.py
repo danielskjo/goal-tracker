@@ -16,6 +16,9 @@ def register():
     email = request.json['email']
     password = request.json['password']
 
+    if not name:
+        return jsonify({'error': 'Enter a name'}), HTTP_400_BAD_REQUEST
+
     if len(password) < 6:
         return jsonify({'error': 'Password is too short'}), HTTP_400_BAD_REQUEST
 
