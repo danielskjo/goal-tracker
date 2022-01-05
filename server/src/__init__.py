@@ -5,7 +5,7 @@ import os
 from .auth import auth
 from .constants.http_status_codes import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 from .database import db
-from .goals import goals, Goal
+# from .goals import goals, Goal
 
 
 def create_app(test_config=None):
@@ -22,14 +22,14 @@ def create_app(test_config=None):
     db.app = app
     db.init_app(app)
 
-    # @app.get('/')
-    # def home():
-    #     return 'Hello world'
+    @app.get('/')
+    def home():
+        return 'Hello world'
 
     JWTManager(app)
 
     app.register_blueprint(auth)
-    app.register_blueprint(goals)
+    # app.register_blueprint(goals)
 
     @app.errorhandler(HTTP_404_NOT_FOUND)
     def handle_404(e):
