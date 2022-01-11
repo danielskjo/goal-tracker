@@ -1,3 +1,4 @@
+import datetime
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
@@ -8,6 +9,13 @@ from .database import db, Goal
 goals = Blueprint("goals", __name__, url_prefix="/api/goals")
 
 
+def to_date(date_str):
+    try:
+        return datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        raise ValueError(f'{date_str} is not valid date in the format YYYY-MM-DD')
+
+
 @goals.route('/', methods=['GET', 'POST'])
 @jwt_required()
 def handle_goals():
@@ -16,17 +24,18 @@ def handle_goals():
     if request.method == 'POST':
         title = request.get_json().get('title', '')
         description = request.get_json().get('description', '')
-        # TODO: Fix date
-        # date =
+
+        try:
+            date = to_date(request.get_json().get('date', datetime.date.today().isoformat()))
+        except ValueError as e:
+            return jsonify({'error': str(e)}), HTTP_400_BAD_REQUEST
 
         if not title:
             return jsonify({
                 'error': 'Enter a title'
             }), HTTP_400_BAD_REQUEST
 
-        goal = Goal(title=title, description=description, user_id=current_user,
-                    # date=date
-                    )
+        goal = Goal(title=title, description=description, user_id=current_user, date=date)
 
         db.session.add(goal)
         db.session.commit()
@@ -72,8 +81,11 @@ def handle_goal(id):
     if request.method == 'PUT' or request.method == 'PATCH':
         title = request.get_json().get('title', '')
         description = request.get_json().get('description', '')
-        # TODO: Fix date
-        # date =
+
+        try:
+            date = to_date(request.get_json().get('date', datetime.date.today().isoformat()))
+        except ValueError as e:
+            return jsonify({'error': str(e)}), HTTP_400_BAD_REQUEST
 
         if not title:
             return jsonify({
@@ -82,7 +94,7 @@ def handle_goal(id):
 
         goal.title = title
         goal.description = description
-        # goal.date = date
+        goal.date = date
 
         db.session.commit()
 
