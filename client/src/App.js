@@ -1,21 +1,28 @@
 import './App.css';
+import {useState, useEffect} from "react";
 
 function App() {
+  let [goals, setGoals] = useState([])
+
+  useEffect(() => {
+    getGoals()
+  }, [])
+
+  let getGoals = async () => {
+    let response = await fetch('/api/goals/')
+    let data = await response.json()
+    setGoals(data["data"])
+    console.log(data["data"])
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <p>Hey</p>
+        <div>
+          {goals.map((goal, index) => (
+              <p key={index}>{goal["title"]}</p>
+          ))}
+        </div>
     </div>
   );
 }
