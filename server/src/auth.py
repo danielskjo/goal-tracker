@@ -38,13 +38,12 @@ def register():
     refresh = create_refresh_token(identity=user.id)
     access = create_access_token(identity=user.id)
 
-    return jsonify({
-        'message': 'User created',
-        'user': {
-            'refresh': refresh,
-            'access': access,
-            'name': name, 'email': email
-        }}), HTTP_201_CREATED
+    return jsonify(
+        refresh=refresh,
+        access=access,
+        name=user.name,
+        email=user.email,
+    ), HTTP_201_CREATED
 
 
 @auth.post('/login')
@@ -61,14 +60,12 @@ def login():
             refresh = create_refresh_token(identity=user.id)
             access = create_access_token(identity=user.id)
 
-            return jsonify({
-                'user': {
-                    'refresh': refresh,
-                    'access': access,
-                    'name': user.name,
-                    'email': user.email
-                }
-            }), HTTP_200_OK
+            return jsonify(
+                refresh=refresh,
+                access=access,
+                name=user.name,
+                email=user.email,
+            ), HTTP_200_OK
 
     return jsonify({'error': 'Wrong credentials'}), HTTP_401_UNAUTHORIZED
 
@@ -79,10 +76,10 @@ def me():
     user_id = get_jwt_identity()
     user = User.query.filter_by(id=user_id).first()
 
-    return jsonify({
-        'name': user.name,
-        'email': user.email
-    }), HTTP_200_OK
+    return jsonify(
+        name=user.name,
+        email=user.email
+    ), HTTP_200_OK
 
 
 @auth.get('/token/refresh')
@@ -91,6 +88,6 @@ def refresh_users_token():
     identity = get_jwt_identity()
     access = create_access_token(identity=identity)
 
-    return jsonify({
-        'access': access
-    }), HTTP_200_OK
+    return jsonify(
+        access=access
+    ), HTTP_200_OK
