@@ -1,30 +1,34 @@
+import React from "react"
+import {
+    BrowserRouter,
+    Route,
+    Routes
+} from "react-router-dom";
+
+import Header from "./components/Header";
+
+import GoalsListPage from "./pages/GoalsListPage";
+import GoalPage from "./pages/GoalPage";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+
 import './App.css';
-import {useState, useEffect} from "react";
 
 function App() {
-  let [goals, setGoals] = useState([])
-
-  useEffect(() => {
-    getGoals()
-  }, [])
-
-  let getGoals = async () => {
-    let response = await fetch('/api/goals/')
-    let data = await response.json()
-    setGoals(data["data"])
-    console.log(data["data"])
-  }
-
-  return (
-    <div>
-      <p>Hey</p>
+    return (
         <div>
-          {goals.map((goal, index) => (
-              <p key={index}>{goal["title"]}</p>
-          ))}
+            <BrowserRouter>
+                <Header/>
+                <Routes>
+                    <Route path="/goal" element={<GoalPage/>}/>
+                    <Route path="/register" element={<RegisterPage/>}/>
+                    <Route path="/login" element={<LoginPage/>}/>
+                    <Route path="/" element={<GoalsListPage/>}/>
+                </Routes>
+            </BrowserRouter>
         </div>
-    </div>
-  );
+    );
 }
 
 export default App;
+
