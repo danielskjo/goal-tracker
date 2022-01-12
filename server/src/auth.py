@@ -35,9 +35,16 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({'message': 'User created', 'user': {
-        'name': name, 'email': email
-    }}), HTTP_201_CREATED
+    refresh = create_refresh_token(identity=user.id)
+    access = create_access_token(identity=user.id)
+
+    return jsonify({
+        'message': 'User created',
+        'user': {
+            'refresh': refresh,
+            'access': access,
+            'name': name, 'email': email
+        }}), HTTP_201_CREATED
 
 
 @auth.post('/login')
