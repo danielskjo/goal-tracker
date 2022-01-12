@@ -1,5 +1,4 @@
 import datetime
-import json
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
@@ -30,26 +29,24 @@ def handle_goals():
         try:
             date = to_date(request.get_json().get('date', datetime.date.today().isoformat()))
         except ValueError as e:
-            return jsonify({'error': str(e)}), HTTP_400_BAD_REQUEST
+            return jsonify(error=str(e)), HTTP_400_BAD_REQUEST
 
         if not title:
-            return jsonify({
-                'error': 'Enter a title'
-            }), HTTP_400_BAD_REQUEST
+            return jsonify(error='Enter a title'), HTTP_400_BAD_REQUEST
 
         goal = Goal(title=title, description=description, user_id=current_user, date=date)
 
         db.session.add(goal)
         db.session.commit()
 
-        return jsonify({
-            'id': goal.id,
-            'title': goal.title,
-            'description': goal.description,
-            'date': goal.date,
-            'created_at': goal.created_at,
-            'updated_at': goal.updated_at
-        }), HTTP_201_CREATED
+        return jsonify(
+            id=goal.id,
+            title=goal.title,
+            description=goal.description,
+            date=goal.date,
+            created_at=goal.created_at,
+            updated_at=goal.updated_at
+        ), HTTP_201_CREATED
     else:
         goals = Goal.query.filter_by(user_id=current_user)
 
@@ -65,9 +62,7 @@ def handle_goals():
                 'updated_at': goal.updated_at
             })
 
-        return jsonify({
-            "data": data
-        }), HTTP_200_OK
+        return jsonify(data=data), HTTP_200_OK
 
 
 @goals.route('/<int:id>', methods=['GET', 'PUT', 'PATCH', 'DELETE'])
@@ -78,7 +73,7 @@ def handle_goal(id):
     goal = Goal.query.filter_by(user_id=current_user, id=id).first()
     print(goal)
     if not goal:
-        return jsonify({'message': 'Item not found'}), HTTP_404_NOT_FOUND
+        return jsonify(message='Item not found'), HTTP_404_NOT_FOUND
 
     if request.method == 'PUT' or request.method == 'PATCH':
         title = request.get_json().get('title', '')
@@ -87,12 +82,10 @@ def handle_goal(id):
         try:
             date = to_date(request.get_json().get('date', datetime.date.today().isoformat()))
         except ValueError as e:
-            return jsonify({'error': str(e)}), HTTP_400_BAD_REQUEST
+            return jsonify(error=str(e)), HTTP_400_BAD_REQUEST
 
         if not title:
-            return jsonify({
-                'error': 'Enter a title'
-            }), HTTP_400_BAD_REQUEST
+            return jsonify(error='Enter a title'), HTTP_400_BAD_REQUEST
 
         goal.title = title
         goal.description = description
@@ -104,13 +97,13 @@ def handle_goal(id):
         db.session.delete(goal)
         db.session.commit()
 
-        return jsonify({'message': 'Item deleted'}), HTTP_204_NO_CONTENT
+        return jsonify(message='Item deleted'), HTTP_204_NO_CONTENT
 
-    return jsonify({
-        'id': goal.id,
-        'title': goal.title,
-        'description': goal.description,
-        'date': goal.date,
-        'created_at': goal.created_at,
-        'updated_at': goal.updated_at
-    }), HTTP_200_OK
+    return jsonify(
+        id=goal.id,
+        title=goal.title,
+        description=goal.description,
+        date=goal.date,
+        created_at=goal.created_at,
+        updated_at=goal.updated_at
+    ), HTTP_200_OK

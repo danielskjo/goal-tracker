@@ -17,16 +17,16 @@ def register():
     password = request.json['password']
 
     if not name:
-        return jsonify({'error': 'Enter a name'}), HTTP_400_BAD_REQUEST
+        return jsonify(error='Enter a name'), HTTP_400_BAD_REQUEST
 
     if len(password) < 6:
-        return jsonify({'error': 'Password is too short'}), HTTP_400_BAD_REQUEST
+        return jsonify(error='Password is too short'), HTTP_400_BAD_REQUEST
 
     if not validators.email(email):
-        return jsonify({'error': 'Email is not valid'}), HTTP_400_BAD_REQUEST
+        return jsonify(error='Email is not valid'), HTTP_400_BAD_REQUEST
 
     if User.query.filter_by(email=email).first() is not None:
-        return jsonify({'error': 'Email is taken'}), HTTP_409_CONFLICT
+        return jsonify(error='Email is taken'), HTTP_409_CONFLICT
 
     pwd_hash = generate_password_hash(password)
 
@@ -67,7 +67,7 @@ def login():
                 email=user.email,
             ), HTTP_200_OK
 
-    return jsonify({'error': 'Wrong credentials'}), HTTP_401_UNAUTHORIZED
+    return jsonify(error='Wrong credentials'), HTTP_401_UNAUTHORIZED
 
 
 @auth.get('/me')
