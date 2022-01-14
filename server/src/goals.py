@@ -71,7 +71,7 @@ def handle_goal(id):
     current_user = get_jwt_identity()
 
     goal = Goal.query.filter_by(user_id=current_user, id=id).first()
-    print(goal)
+
     if not goal:
         return jsonify(message='Item not found'), HTTP_404_NOT_FOUND
 

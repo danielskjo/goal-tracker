@@ -19,7 +19,7 @@ const RegisterPage = () => {
             })
         }).then(res => {
             if (res.status === 201) return res.json()
-            else alert('There has been some error')
+            else console.log('There has been some error')
         }).then(data => {
             console.log('This came from the server', data)
             sessionStorage.setItem('token', data.access)

@@ -9,7 +9,6 @@ const GoalsListPage = () => {
     }, [])
 
     let getGoals = async () => {
-        console.log(token);
         const headers = new Headers({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
@@ -20,7 +19,7 @@ const GoalsListPage = () => {
             headers: headers,
         }).then(res => {
             if (res.status === 200) return res.json()
-            else alert('There has been some error')
+            else console.log('There has been some error')
         }).then(data => {
             console.log('This came from the server', data)
             setGoals(data.data)

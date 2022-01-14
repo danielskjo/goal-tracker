@@ -20,10 +20,10 @@ function App() {
             <BrowserRouter>
                 <Header/>
                 <Routes>
-                    <Route path="/goal" element={<GoalPage/>}/>
+                    <Route path="/" exact element={<GoalsListPage/>}/>
+                    <Route path="/goals/:id" element={<GoalPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/" element={<GoalsListPage/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
