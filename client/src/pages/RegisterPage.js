@@ -36,7 +36,8 @@ const RegisterPage = () => {
                     <input type='text' placeholder='password' value={password}
                            onChange={(e) => setPassword(e.target.value)}/>
                     <button onClick={handleSubmit}>Register</button>
-                </div>}
+                </div>
+            }
         </div>
     )
 }

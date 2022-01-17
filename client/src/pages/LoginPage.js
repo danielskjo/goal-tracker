@@ -33,7 +33,8 @@ const LoginPage = () => {
                     <input type='text' placeholder='password' value={password}
                            onChange={(e) => setPassword(e.target.value)}/>
                     <button onClick={handleSubmit}>Login</button>
-                </div>}
+                </div>
+            }
         </div>
     )
 }
