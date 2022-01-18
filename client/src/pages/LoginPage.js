@@ -1,11 +1,15 @@
 import React, {useState} from 'react'
+import {Navigate, useNavigate} from "react-router-dom";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const token = sessionStorage.getItem('token')
+    const navigate = useNavigate();
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
         fetch('/api/auth/login', {
             method: 'POST',
             'headers': {
@@ -21,12 +25,15 @@ const LoginPage = () => {
         }).then(data => {
             console.log('This came from the server', data)
             sessionStorage.setItem('token', data.access)
+            navigate('/')
+            window.location.reload()
         }).catch(err => console.log('There was an error', err))
     }
 
     return (
         <div>
-            {token && token !== '' && token !== undefined ? ('You are logged in with this token ' + token) :
+            {token && token !== '' && token !== undefined ?
+                <Navigate to='/'/> :
                 <div>
                     <h1>Login</h1>
                     <input type='text' placeholder='email' value={email} onChange={(e) => setEmail(e.target.value)}/>

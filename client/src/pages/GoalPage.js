@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom';
+import {Navigate, useNavigate, useParams} from 'react-router-dom';
 
 const GoalPage = () => {
     let {id} = useParams();
@@ -11,14 +11,14 @@ const GoalPage = () => {
     }, [id])
 
     let getGoal = async () => {
-        if (id == 'new') return
+        if (id === 'new') return
 
         const headers = new Headers({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
         })
 
-        fetch(`/api/goals/${id}`, {
+        await fetch(`/api/goals/${id}`, {
             method: 'GET',
             headers: headers,
         }).then(res => {
@@ -33,13 +33,13 @@ const GoalPage = () => {
     return (
         <div>
             {token && token !== '' && token !== undefined ?
-                (<div>
-                    <h1>{goal.title}</h1>
-                    <h3>{goal.id}</h3>
-                    <p>{goal.description}</p>
-                    <p>{goal.date}</p>
-                </div>) :
-                `Goal  Page`
+                <div>
+                    <h1>{goal && goal.title}</h1>
+                    <h3>{goal && goal.id}</h3>
+                    <p>{goal && goal.description}</p>
+                    <p>{goal && goal.date}</p>
+                </div> :
+                <Navigate to='/login'/>
             }
         </div>
     )

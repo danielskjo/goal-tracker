@@ -29,7 +29,7 @@ const GoalsListPage = () => {
     return (
         <div>
             {token && token !== '' && token !== undefined ?
-                (<div>
+                <div>
                     <h1>Goals (Count: {goals.length})</h1>
                     <div>
                         {goals.map((goal, index) => (
@@ -40,8 +40,8 @@ const GoalsListPage = () => {
                             </div>
                         ))}
                     </div>
-                </div>) :
-                'Goals List Page'
+                </div> :
+                'Home Page'
             }
         </div>
     )
