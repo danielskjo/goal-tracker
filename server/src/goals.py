@@ -78,19 +78,21 @@ def handle_goal(id):
         return jsonify(message='Item not found'), HTTP_404_NOT_FOUND
 
     if request.method == 'PUT' or request.method == 'PATCH':
-        title = request.get_json().get('title', '')
-        description = request.get_json().get('description', '')
+        title = request.get_json().get('title', goal.title)
+        description = request.get_json().get('description', goal.description)
+        progress = request.get_json().get('progress', goal.progress)
 
         try:
-            date = to_date(request.get_json().get('date', datetime.date.today().isoformat()))
+            if request.get_json().get('date'):
+                date = to_date(request.get_json().get('date'))
+            else:
+                date = goal.date
         except ValueError as e:
             return jsonify(error=str(e)), HTTP_400_BAD_REQUEST
 
-        if not title:
-            return jsonify(error='Enter a title'), HTTP_400_BAD_REQUEST
-
         goal.title = title
         goal.description = description
+        goal.progress = progress
         goal.date = date
 
         db.session.commit()
