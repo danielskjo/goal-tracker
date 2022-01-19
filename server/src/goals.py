@@ -43,6 +43,7 @@ def handle_goals():
             id=goal.id,
             title=goal.title,
             description=goal.description,
+            progress=goal.progress,
             date=goal.date,
             created_at=goal.created_at,
             updated_at=goal.updated_at
@@ -57,6 +58,7 @@ def handle_goals():
                 'id': goal.id,
                 'title': goal.title,
                 'description': goal.description,
+                'progress': goal.progress,
                 'date': goal.date,
                 'created_at': goal.created_at,
                 'updated_at': goal.updated_at
@@ -103,6 +105,7 @@ def handle_goal(id):
         id=goal.id,
         title=goal.title,
         description=goal.description,
+        progress=goal.progress,
         date=goal.date,
         created_at=goal.created_at,
         updated_at=goal.updated_at
